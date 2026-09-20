@@ -21,6 +21,7 @@ USA.
 
 #include "../src/argtable2.h"
 #include <stdlib.h>
+#include <string.h>
 
 /* for memory leak debugging */
 #ifdef DMALLOC
