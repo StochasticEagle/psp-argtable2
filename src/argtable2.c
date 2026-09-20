@@ -576,14 +576,20 @@ static
 void arg_cat(char **pdest, const char *src, size_t *pndest)
     {
     char *dest = *pdest;
-    char *end  = dest + *pndest;
+    char *end;
 
-    /*locate null terminator of dest string */
-    while(dest<end && *dest!=0)
+    /* always reserve one byte for the terminating null */
+    if (*pndest == 0)
+        return;
+
+    end = dest + *pndest;
+
+    /* locate null terminator of dest string */
+    while(dest<end-1 && *dest!=0)
         dest++;
 
     /* concat src string to dest string */
-    while(dest<end && *src!=0)
+    while(dest<end-1 && *src!=0)
         *dest++ = *src++;
 
     /* null terminate dest string */
@@ -631,7 +637,8 @@ void arg_cat_option(char *dest, size_t ndest, const char *shortopts, const char 
 
         /* add comma separated option tag */
         ncspn = strcspn(longopts,",");
-        strncat(dest,longopts,(ncspn<ndest)?ncspn:ndest);
+        if (ndest > 1)
+            strncat(dest,longopts,(ncspn<ndest-1)?ncspn:ndest-1);
 
         if (datatype)
             {
