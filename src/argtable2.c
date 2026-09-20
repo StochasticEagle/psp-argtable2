@@ -584,13 +584,7 @@ void arg_cat_option(char *dest, size_t ndest, const char *shortopts, const char 
     {
     if (shortopts)
         {
-        char option[3];
-        
-        /* note: option array[] is initialiazed dynamically here to satisfy   */
-        /* a deficiency in the watcom compiler wrt static array initializers. */
-        option[0] = '-';
-        option[1] = shortopts[0];
-        option[2] = 0;
+        char option[3] = {'-', shortopts[0], '\0'};
         
         arg_cat(&dest,option,&ndest);
         if (datatype)
@@ -655,13 +649,7 @@ void arg_cat_optionv(char *dest, size_t ndest, const char *shortopts, const char
         while(*c)
             {
             /* "-a|-b|-c" */
-            char shortopt[3];
-        
-            /* note: shortopt array[] is initialiazed dynamically here to satisfy */
-            /* a deficiency in the watcom compiler wrt static array initializers. */
-            shortopt[0]='-';
-            shortopt[1]=*c;
-            shortopt[2]=0;
+            char shortopt[3] = {'-', *c, '\0'};
             
             arg_cat(&dest,shortopt,&ndest);
             if (*++c)
