@@ -19,18 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 **********************************************************************/
 
-/* config.h must be included before anything else */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-/* #ifdef HAVE_STDLIB_H */
-#include <stdlib.h>
-/* #endif */
-
-#include "argtable2.h"
 #include <ctype.h>
 #include <limits.h>
+#include <stdlib.h>
+
+#include "argtable2.h"
 
 /* local error codes */
 enum {EMINCOUNT=1,EMAXCOUNT,EBADINT,EOVERFLOW};
@@ -58,7 +51,7 @@ static long int strtol0X(const char* str, const char **endptr, char X, int base)
     const char *ptr=str;        /* ptr to current position in str */
 
     /* skip leading whitespace */
-    while (isspace(*ptr))
+    while (isspace((unsigned char)*ptr))
         ptr++;
     /* printf("1) %s\n",ptr); */
 
@@ -87,7 +80,7 @@ static long int strtol0X(const char* str, const char **endptr, char X, int base)
         return 0;
         }
    /* printf("3) %s\n",ptr); */
-   if (toupper(*ptr++)!=toupper(X))
+   if (toupper((unsigned char)*ptr++)!=toupper((unsigned char)X))
         {
         /* printf("failed to detect '%c'\n",X); */
         *endptr=str;
@@ -114,7 +107,7 @@ static long int strtol0X(const char* str, const char **endptr, char X, int base)
 static int detectsuffix(const char *str, const char *suffix)
     {
     /* scan pairwise through strings until mismatch detected */
-    while( toupper(*str) == toupper(*suffix) )
+    while( toupper((unsigned char)*str) == toupper((unsigned char)*suffix) )
         {
         /* printf("'%c' '%c'\n", *str, *suffix); */
 
@@ -133,7 +126,7 @@ static int detectsuffix(const char *str, const char *suffix)
         return 0;   /* failed to consume entire suffix */
 
     /* skip any remaining whitespace in str */
-    while (isspace(*str))
+    while (isspace((unsigned char)*str))
         str++;
 
     /* return 1 (success) if we have reached end of str else return 0 (fail) */

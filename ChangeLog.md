@@ -3,6 +3,10 @@ Version 2.14, released Sep xx, 2026.
     Added PlayStation Portable (PSP) modifications.
     Modernized the bundled GNU getopt integration for PSP.
     Modernized legacy C function definitions and fixed bounded string concatenation.
+    Fixed remaining bounded string and ctype handling issues.
+    Simplified source configuration for the PSP target.
+    Fixed date-parser error reporting and standard C initialization.
+    Added relocatable pkg-config metadata and CMake target usage requirements.
 
 Version 2.13, released Jan 10, 2011.
     Added support for the CMake tool (http://www.cmake.org/). 

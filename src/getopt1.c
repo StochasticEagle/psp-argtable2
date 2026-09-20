@@ -19,28 +19,12 @@
    write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "getopt.h"
+#include <stdio.h>
 #include <stdlib.h>
 
-#if !defined (__STDC__) || !__STDC__
-/* This is a separate conditional since some stdc systems
-   reject `defined (const)'.  */
-#ifndef const
-#define const
-#endif
-#endif
-
-#include <stdio.h>
+#include "getopt.h"
 
 /* psp-argtable2 always builds its bundled getopt implementation for PSP. */
-
-#ifndef	NULL
-#define NULL 0
-#endif
 
 int
 getopt_long(int argc, char *const *argv, const char *options,

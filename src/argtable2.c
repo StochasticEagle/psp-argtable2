@@ -19,34 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 **********************************************************************/
 
-/* config.h must be included before anything else */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef STDC_HEADERS
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#endif
-
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
-
-#ifdef HAVE_GETOPT_H
-#include <getopt.h>
-#else
-#include "./getopt.h"
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
 
 #include "argtable2.h"
-#include "./getopt.h"
+#include "getopt.h"
 
 static
 void arg_register_error(struct arg_end *end, void *parent, int error, const char *argval)
@@ -707,7 +685,8 @@ void arg_cat_optionv(char *dest, size_t ndest, const char *shortopts, const char
 
             /* add comma separated option tag */
             ncspn = strcspn(c,",");
-            strncat(dest,c,(ncspn<ndest)?ncspn:ndest);
+            if (ndest > 1)
+                strncat(dest,c,(ncspn<ndest-1)?ncspn:ndest-1);
             c+=ncspn;
 
             /* add given separator in place of comma */
@@ -976,7 +955,7 @@ void arg_print_formatted( FILE *fp, const unsigned lmargin, const unsigned rmarg
         /* Eat leading whitespaces. This is essential because while
            wrapping lines, there will often be a whitespace at beginning
            of line  */
-        while ( isspace(*(text+line_start)) ) 
+        while ( isspace((unsigned char)*(text+line_start)) ) 
             { line_start++; }
 
         if ((line_end - line_start) > colwidth ) 
@@ -985,7 +964,7 @@ void arg_print_formatted( FILE *fp, const unsigned lmargin, const unsigned rmarg
         /* Find last whitespace, that fits into line */
         while ( ( line_end > line_start ) 
                 && ( line_end - line_start > colwidth )
-                && !isspace(*(text+line_end))) 
+                && !isspace((unsigned char)*(text+line_end))) 
             { line_end--; }
 
         /* Do not print trailing whitespace. If this text

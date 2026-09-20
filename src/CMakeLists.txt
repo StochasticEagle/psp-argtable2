@@ -1,4 +1,4 @@
-ADD_LIBRARY(
+add_library(
     argtable2 STATIC
     arg_date.c
     arg_dbl.c
@@ -14,17 +14,24 @@ ADD_LIBRARY(
     getopt1.c
 )
 
-INSTALL(
+target_include_directories(
+    argtable2
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include>
+)
+
+install(
     TARGETS argtable2
     ARCHIVE DESTINATION lib
 )
 
-INSTALL(
+install(
     FILES argtable2.h
     DESTINATION include
 )
 
-SET_TARGET_PROPERTIES(
+set_target_properties(
     argtable2
     PROPERTIES
         DEBUG_POSTFIX d

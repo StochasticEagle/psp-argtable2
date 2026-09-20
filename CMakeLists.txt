@@ -1,34 +1,15 @@
 cmake_minimum_required(VERSION 3.20)
 project(argtable2 VERSION 2.14 LANGUAGES C)
 
-OPTION( HAVE_GETOPT_H "Have the getopt library" 0 )
-IF( HAVE_GETOPT_H )
-	ADD_DEFINITIONS( -DHAVE_GETOPT_H )
-ENDIF( HAVE_GETOPT_H )
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/argtable2.pc.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/argtable2.pc"
+    @ONLY
+)
 
-OPTION( HAVE_INTTYPES_H "Have the file inttypes.h" 1 )
-IF( HAVE_INTTYPES_H )
-	ADD_DEFINITIONS( -DHAVE_INTTYPES_H )
-ENDIF( HAVE_INTTYPES_H )
+install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/argtable2.pc"
+    DESTINATION lib/pkgconfig
+)
 
-OPTION( HAVE_MEMORY_H "Have the file memory.h" 1 )
-IF( HAVE_MEMORY_H )
-	ADD_DEFINITIONS( -DHAVE_MEMORY_H )
-ENDIF( HAVE_MEMORY_H )
-
-OPTION( HAVE_STDLIB_H "Have the file stdlib.h" 1 )
-IF( HAVE_STDLIB_H )
-	ADD_DEFINITIONS( -DHAVE_STDLIB_H )
-ENDIF( HAVE_STDLIB_H )
-
-OPTION( HAVE_STRING_H "Have the file string.h" 1 )
-IF( HAVE_STRING_H )
-	ADD_DEFINITIONS( -DHAVE_STRING_H )
-ENDIF( HAVE_STRING_H )
-
-OPTION( HAVE_STDC_HEADERS "Have std C header files" 1 )
-IF( HAVE_STDC_HEADERS )
-	ADD_DEFINITIONS( -DSTDC_HEADERS )
-ENDIF( HAVE_STDC_HEADERS )
-
-ADD_SUBDIRECTORY( src )
+add_subdirectory(src)

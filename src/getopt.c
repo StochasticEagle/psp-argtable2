@@ -24,59 +24,16 @@
    write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.  */
 
-/* This tells Alpha OSF/1 not to define a getopt prototype in <stdio.h>.
-   Ditto for AIX 3.2 and <stdlib.h>.  */
-#ifndef _NO_PROTO
-#define _NO_PROTO
-#endif
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <string.h>
-#include <stdlib.h>
-
-#if !defined (__STDC__) || !__STDC__
-/* This is a separate conditional since some stdc systems
-   reject `defined (const)'.  */
-#ifndef const
-#define const
-#endif
-#endif
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* psp-argtable2 always builds its bundled getopt implementation for PSP.
    Use the standard C library declarations directly rather than relying on
    the glibc-specific __GNU_LIBRARY__ compatibility path. */
 
-#ifdef VMS
-#include <unixlib.h>
-#if HAVE_STRING_H - 0
-#include <string.h>
-#ifdef STRNCASECMP_IN_STRINGS_H
-#   include <strings.h>
-#endif
-#endif
-#endif
 
-#if defined (WIN32) && !defined (__CYGWIN32__)
-/* It's not Unix, really.  See?  Capital letters.  */
-#include <windows.h>
-#define getpid() GetCurrentProcessId()
-#endif
-
-#ifndef _
-/* This is for other GNU distributions with internationalized messages.
-   When compiling libc, the _ macro is predefined.  */
-#ifdef HAVE_LIBINTL_H
-#include <libintl.h>
-#define _(msgid)	gettext (msgid)
-#else
-#define _(msgid)	(msgid)
-#endif
-#endif
+#define _(msgid) (msgid)
 
 /* This version of `getopt' appears to the caller like standard Unix `getopt'
    but it behaves differently for the user, since it allows the user
@@ -181,8 +138,6 @@ ordering;
 /* Value of POSIXLY_CORRECT environment variable.  */
 static char *posixly_correct;
 
-#define my_index strchr
-
 
 /* Handle permutation of arguments.  */
 
@@ -193,30 +148,6 @@ static char *posixly_correct;
 static int first_nonopt;
 static int last_nonopt;
 
-#ifdef _LIBC
-/* Bash 2.0 gives us an environment variable containing flags
-   indicating ARGV elements that should not be considered arguments.  */
-
-static const char *nonoption_flags;
-static int nonoption_flags_len;
-
-static int original_argc;
-static char *const *original_argv;
-
-/* Make sure the environment variable bash 2.0 puts in the environment
-   is valid for the getopt call we must make sure that the ARGV passed
-   to getopt is that one passed to the process.  */
-static void store_args(int argc, char *const *argv) __attribute__((unused));
-     static void
-          store_args(int argc, char *const *argv)
-{
-	/* XXX This is no good solution.  We should rather copy the args so
-	   that we can compare them later.  But we must not use malloc(3).  */
-	original_argc = argc;
-	original_argv = argv;
-}
-text_set_element(__libc_subinit, store_args);
-#endif
 
 /* Exchange two adjacent subsequences of ARGV.
    One subsequence is elements [first_nonopt,last_nonopt)
@@ -285,7 +216,7 @@ exchange(char **argv)
 /* Initialize the internal data when the first call is made.  */
 
 static const char *
-_getopt_initialize(int argc, char *const *argv, const char *optstring)
+_getopt_initialize(const char *optstring)
 {
 	/* Start processing options with ARGV-element 1 (since ARGV-element 0
 	   is the program name); the sequence of previously skipped
@@ -314,26 +245,6 @@ _getopt_initialize(int argc, char *const *argv, const char *optstring)
 	else
 		ordering = PERMUTE;
 
-#ifdef _LIBC
-	if (posixly_correct == NULL
-	    && argc == original_argc && argv == original_argv)
-	{
-		/* Bash 2.0 puts a special variable in the environment for each
-		   command it runs, specifying which ARGV elements are the results of
-		   file name wildcard expansion and therefore should not be
-		   considered as options.  */
-		char var[100];
-
-		sprintf(var, "_%d_GNU_nonoption_argv_flags_", getpid());
-		nonoption_flags = getenv(var);
-		if (nonoption_flags == NULL)
-			nonoption_flags_len = 0;
-		else
-			nonoption_flags_len = strlen(nonoption_flags);
-	}
-	else
-		nonoption_flags_len = 0;
-#endif
 
 	return optstring;
 }
@@ -402,22 +313,13 @@ _getopt_internal(int argc, char *const *argv, const char *optstring,
 
 	if (!__getopt_initialized || optind == 0)
 	{
-		optstring = _getopt_initialize(argc, argv, optstring);
+		optstring = _getopt_initialize(optstring);
 		optind = 1;	/* Don't scan ARGV[0], the program name.  */
 		__getopt_initialized = 1;
 	}
 
-	/* Test whether ARGV[optind] points to a non-option argument.
-	   Either it does not have option syntax, or there is an environment flag
-	   from the shell indicating it is not an option.  The later information
-	   is only used when the used in the GNU libc.  */
-#ifdef _LIBC
-#define NONOPTION_P (argv[optind][0] != '-' || argv[optind][1] == '\0'	      \
-		     || (optind < nonoption_flags_len			      \
-			 && nonoption_flags[optind] == '1'))
-#else
+	/* Test whether ARGV[optind] points to a non-option argument. */
 #define NONOPTION_P (argv[optind][0] != '-' || argv[optind][1] == '\0')
-#endif
 
 	if (nextchar == NULL || *nextchar == '\0')
 	{
@@ -513,7 +415,7 @@ _getopt_internal(int argc, char *const *argv, const char *optstring,
 
 	if (longopts != NULL
 	    && (argv[optind][1] == '-'
-		|| (long_only && (argv[optind][2] || !my_index(optstring, argv[optind][1])))))
+		|| (long_only && (argv[optind][2] || !strchr(optstring, argv[optind][1])))))
 	{
 		char *nameend;
 		const struct option *p;
@@ -625,7 +527,7 @@ _getopt_internal(int argc, char *const *argv, const char *optstring,
 		   option, then it's an error.
 		   Otherwise interpret it as a short option.  */
 		if (!long_only || argv[optind][1] == '-'
-		    || my_index(optstring, *nextchar) == NULL)
+		    || strchr(optstring, *nextchar) == NULL)
 		{
 			if (opterr)
 			{
@@ -649,7 +551,7 @@ _getopt_internal(int argc, char *const *argv, const char *optstring,
 
 	{
 		char c = *nextchar++;
-		char *temp = my_index(optstring, c);
+		char *temp = strchr(optstring, c);
 
 		/* Increment `optind' when we start to process its last character.  */
 		if (*nextchar == '\0')
