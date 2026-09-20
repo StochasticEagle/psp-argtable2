@@ -29,6 +29,7 @@ USA.
 /* #endif */
 
 #include "argtable2.h"
+#include <ctype.h>
 #include <limits.h>
 
 /* local error codes */

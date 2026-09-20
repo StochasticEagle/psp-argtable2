@@ -34,9 +34,7 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
+#include <string.h>
 
 #if !defined (__STDC__) || !__STDC__
 /* This is a separate conditional since some stdc systems

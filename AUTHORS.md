@@ -24,3 +24,4 @@ Michael Brown for incorporating support for pkg-config into the autoconf scripts
 Alexander Lindert for extensions to the parser to support hex, octal and binary integer formats as well as KB/MB/GB suffixes.
 Rob Zaborowski for providing build configuration files for the CMake tool.
 Moczik Gabor for bug fixes relating to the parsing of filepaths and filename extensions.
+Aaron Stone updated with Playstation Portable fixes and published on GitHub.

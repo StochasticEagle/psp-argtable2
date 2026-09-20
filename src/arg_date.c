@@ -33,11 +33,8 @@ USA.
 #include <stdlib.h>
 #endif
 
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
-
 #include "argtable2.h"
+#include <strings.h>
 
 /* local error codes  */
 enum {EMINCOUNT=1,EMAXCOUNT,EBADDATE};
