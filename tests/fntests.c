@@ -1,5 +1,6 @@
 #include "../src/argtable2.h"
 #include <assert.h>
+#include <string.h>
 
 /* for memory leak debugging */
 #ifdef DMALLOC

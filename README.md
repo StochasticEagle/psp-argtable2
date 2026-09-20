@@ -60,6 +60,35 @@ lib/pkgconfig/argtable2.pc
 The pkg-config metadata is relocatable and resolves its include and library
 directories relative to the installed `argtable2.pc` file.
 
+## Validation builds
+
+The test sources can be built as PSP executables to verify the public API and
+linkage. They are not registered with CTest because they cannot be executed on
+the host while cross-compiling for the PSP.
+
+The programming examples are compile checks only. CMake builds them as object
+files so their syntax, headers, and API usage are validated without producing
+runnable example executables.
+
+Enable both validation sets with:
+
+```sh
+cmake -S . -B build \
+    -DCMAKE_TOOLCHAIN_FILE="$PSPDEV/psp/share/pspdev.cmake" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DARGTABLE2_BUILD_TESTS=ON \
+    -DARGTABLE2_CHECK_EXAMPLES=ON
+cmake --build build --parallel
+```
+
+The options may also be enabled independently:
+
+- `ARGTABLE2_BUILD_TESTS` builds and links the PSP test executables.
+- `ARGTABLE2_CHECK_EXAMPLES` compiles the programming examples without
+  linking them into executables.
+
+Both options are disabled by default and do not affect the installed library.
+
 ## CMake integration
 
 A PSP CMake project may also include this source tree directly:
@@ -75,8 +104,8 @@ directory.
 ## Source layout
 
 - `src/` — Argtable2 library source and bundled GNU getopt implementation
-- `example/` — upstream Argtable2 example programs retained as source examples
-- `tests/` — upstream Argtable2 test sources
+- `example/` — programming examples, compile-checked but not built as runnable programs
+- `tests/` — test programs that can be built and linked for the PSP
 - `doc/` — upstream Argtable2 documentation
 
 CMake is the supported build system for this PSP fork. The historical

@@ -10,6 +10,7 @@ Version 2.14, released Sep 19, 2026.
     Removed obsolete Autotools, NMake, and non-PSP platform build support.
     Replaced legacy installation instructions with PSP CMake documentation.
     Removed unimplemented arg_key0, arg_key1, and arg_keyn declarations.
+    Added optional CMake test builds and compile-only programming example checks.
 
 Version 2.13, released Jan 10, 2011.
     Added support for the CMake tool (http://www.cmake.org/). 
