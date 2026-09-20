@@ -161,18 +161,6 @@ struct arg_lit* arg_litn(const char* shortopts,
                          int maxcount,
                          const char *glossary);
 
-struct arg_key* arg_key0(const char* keyword,
-                         int flags,
-                         const char* glossary);
-struct arg_key* arg_key1(const char* keyword,
-                         int flags,
-                         const char* glossary);
-struct arg_key* arg_keyn(const char* keyword,
-                         int flags,
-                         int mincount,
-                         int maxcount,
-                         const char* glossary);
-
 struct arg_int* arg_int0(const char* shortopts,
                          const char* longopts,
                          const char* datatype,

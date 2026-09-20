@@ -1,4 +1,4 @@
-Version 2.14, released Sep xx, 2026.
+Version 2.14, released Sep 19, 2026.
     Updated CMake support.
     Added PlayStation Portable (PSP) modifications.
     Modernized the bundled GNU getopt integration for PSP.
@@ -9,6 +9,7 @@ Version 2.14, released Sep xx, 2026.
     Added relocatable pkg-config metadata and CMake target usage requirements.
     Removed obsolete Autotools, NMake, and non-PSP platform build support.
     Replaced legacy installation instructions with PSP CMake documentation.
+    Removed unimplemented arg_key0, arg_key1, and arg_keyn declarations.
 
 Version 2.13, released Jan 10, 2011.
     Added support for the CMake tool (http://www.cmake.org/). 
