@@ -118,3 +118,9 @@ Argtable2 is distributed under the GNU Library General Public License, version 2
 or later. See `LICENSE.md`.
 
 Original authors and contributors are listed in `AUTHORS.md`.
+
+## AI-assisted contributions and licensing
+
+Some changes in this fork were developed with generative-AI assistance and reviewed or integrated by the maintainer. The maintainer dedicates any copyright interest they hold in their independently original AI-generated or AI-assisted contributions to the public domain under [The Unlicense](https://unlicense.org/). Machine-generated material that is not copyrightable requires no license.
+
+This dedication covers **only** rights controlled by the maintainer. It does not relicense pre-existing upstream code, modifications that remain derivative of upstream code, incorporated components, submodules, dependencies, documentation, or other third-party material. Their applicable license files, source headers, and attribution requirements remain in force, including where AI helped modify that material.
